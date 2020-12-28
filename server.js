@@ -46,7 +46,6 @@ app.post("/create_employee", function (req, res) {
 		"lastName":"${req.body.user.lastName}",
 		"picture":"${req.body.user.picture}",
 		"title":"${req.body.user.title}"}`;
-		// console.log(req.body)
 
 		var config = {
 			method: 'post',
@@ -74,27 +73,10 @@ app.post("/create_employee", function (req, res) {
 
 
 // GET Form to add new employee (GET the form first, then the forms "submit" button handles the POST request.
-app.get("/create_employee", function (req, res) {
-	// var newUser = req.query.user;
-	// console.log(newUser)
-
-	// var config = {
-	// 	method: 'get',
-	// 	url: 'https://spa-lab-ii-default-rtdb.firebaseio.com/data.json',
-	// 	headers: { },
-	// 	"Content-Type": "text/plain"
-	//   };
-	  
-	//   axios(config)
-	//   .then(function (response) {
-	// 	console.log(JSON.stringify(response.data));
-	//   })
-	//   .catch(function (error) {
-	// 	console.log(error);
-	//   });	  
-
+app.get("/create_employee", function (req, res) {	  
 	res.render("pages/create_employee"); 
 });
+
 
 
 
@@ -138,8 +120,7 @@ axios(config)
 // "Render" the person view here!
 app.get("/directory/:uid", function (req, res) {
  let id = req.params.uid;
-//  console.log('this is the id ' + id)
-// 	console.log(req);
+
 	var config = {
 		method: 'get',
 		url: `https://spaexample-43742-default-rtdb.firebaseio.com/data/${id}.json`,
@@ -170,8 +151,7 @@ app.get("/directory/:uid", function (req, res) {
 // DELETE user
 app.get("/delete/:uid", function (req, res) {
 	let id = req.params.uid;
-	//  console.log('this is the id ' + id)
-	// 	console.log(req);
+
 		var config = {
 			method: 'delete',
 			url: `https://spaexample-43742-default-rtdb.firebaseio.com/data/${id}.json`,
@@ -198,80 +178,61 @@ app.get("/delete/:uid", function (req, res) {
 
 
 
-// //GET Delete user form
-// app.get("/delete", function (req, res) {
-// 	// var newUser = req.query.user;
-// 	// console.log(newUser)
-
-// 	// var config = {
-// 	// 	method: 'get',
-// 	// 	url: 'https://spa-lab-ii-default-rtdb.firebaseio.com/data.json',
-// 	// 	headers: { },
-// 	// 	"Content-Type": "text/plain"
-// 	//   };
-	  
-// 	//   axios(config)
-// 	//   .then(function (response) {
-// 	// 	console.log(JSON.stringify(response.data));
-// 	//   })
-// 	//   .catch(function (error) {
-// 	// 	console.log(error);
-// 	//   });	  
-
-// 	res.render("pages/delete"); 
-// });
-
-
-
-//UPDATE user form
-// app.get("/update", function (req, res) {
-// 	// var newUser = req.query.user;
-// 	// console.log(newUser)
-
-// 	// var config = {
-// 	// 	method: 'get',
-// 	// 	url: 'https://spa-lab-ii-default-rtdb.firebaseio.com/data.json',
-// 	// 	headers: { },
-// 	// 	"Content-Type": "text/plain"
-// 	//   };
-	  
-// 	//   axios(config)
-// 	//   .then(function (response) {
-// 	// 	console.log(JSON.stringify(response.data));
-// 	//   })
-// 	//   .catch(function (error) {
-// 	// 	console.log(error);
-// 	//   });	  
-
-// 	res.render("pages/update"); 
-// });
-
-
 //UPDATE User
+app.post("/update", function(req, res) {
+
+	let id = req.params.uid;
+	var data = `{"firstName":"${req.body.user.firstName}"}`;
+	console.log(req);
+
+	
+	var config = {
+		method: 'patch',
+		url: `https://spaexample-43742-default-rtdb.firebaseio.com/data/${id}.json`,
+		headers: { 
+			"Content-Type": "text/plain"
+		},
+		data : data
+	  };
+	  
+	  axios(config)
+	  .then(function (response) {
+		console.log(JSON.stringify(response.data));
+	  })
+	  .catch(function (error) {
+		console.log(error);
+	  });
+
+	//   res.redirect("/directory");
+
+	res.redirect("/directory");
+})
+
+
+
+
 app.get("/update/:uid", function (req, res) {
 	let id = req.params.uid;
-	//  console.log('this is the id ' + id)
-	// 	console.log(req);
-		var config = {
-			method: 'patch',
-			url: `https://spaexample-43742-default-rtdb.firebaseio.com/data/${id}.json`,
-			headers: { }
-		  };
-		  
-		  axios(config)
-		  .then((response) => {
-			let dataFromAPI = response.data;
-			return dataFromAPI
-		  })
-		//   .then((response) => {
-		// 	res.render("/update",{ 
-		// 		employee: response });
-		// 	})
-		  .catch(function (error) {
-			console.log(error);
-		  });
-
-		  res.redirect("/directory");
+	console.log(req)
+	
+	var config = {
+		method: 'get',
+		url: `https://spaexample-43742-default-rtdb.firebaseio.com/data/${id}.json`,
+		headers: { }
+	  };
+	  axios(config)
+	  .then((response) => {
+		let dataFromAPI = response.data;
+		return dataFromAPI
+	  })
+	  .then((response) => {
+		res.render("pages/update",{ 
+			employee: response });
+		})
+	  .catch(function (error) {
+		console.log(error);
+	  });
+	// res.render("pages/update"); 
 });
 
 
