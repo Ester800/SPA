@@ -29,11 +29,6 @@ app.get("/about", function (req, res) {
 	res.render("pages/about");
 });
 
-
-
-
-
-
 // POST a new employee route
 app.post("/create_employee", function (req, res) {
 	// Useful for console logging the form inputs
@@ -58,7 +53,7 @@ app.post("/create_employee", function (req, res) {
 		  
 		  axios(config)
 		  .then(function (response) {
-			console.log(JSON.stringify(response.data));
+			//console.log(JSON.stringify(response.data));
 		  })
 		  .catch(function (error) {
 			console.log(error);
@@ -68,20 +63,10 @@ app.post("/create_employee", function (req, res) {
 });
 
 
-
-
-
-
 // GET Form to add new employee (GET the form first, then the forms "submit" button handles the POST request.
 app.get("/create_employee", function (req, res) {	  
 	res.render("pages/create_employee"); 
 });
-
-
-
-
-
-
 
 
 // GET Directory of employees, returns an array of objects from the server.
@@ -99,7 +84,7 @@ axios(config)
   return Object.entries(response.data.data);
 })
 .then((employee) => {
-	console.log(employee)
+	//console.log(employee)
 	res.render("pages/directory", {
 		employees: employee
 	});
@@ -172,20 +157,15 @@ app.get("/delete/:uid", function (req, res) {
 });
 
 
-
-
-
-
-
-
 //UPDATE User
 app.post("/update", function(req, res) {
+	let pattern = /-\w{3,}\D\w+/g;
+	let idLocation = req.headers.referer;
+	let id = pattern.exec(idLocation);
 
-	let id = req.params.uid;
 	var data = `{"firstName":"${req.body.user.firstName}"}`;
 	console.log(req);
 
-	
 	var config = {
 		method: 'patch',
 		url: `https://spaexample-43742-default-rtdb.firebaseio.com/data/${id}.json`,
@@ -197,18 +177,16 @@ app.post("/update", function(req, res) {
 	  
 	  axios(config)
 	  .then(function (response) {
-		console.log(JSON.stringify(response.data));
+		// let dataFromAPI = response.data;
+		// return dataFromAPI
+		//console.log(JSON.stringify(response.data));
 	  })
 	  .catch(function (error) {
 		console.log(error);
 	  });
 
-	//   res.redirect("/directory");
-
 	res.redirect("/directory");
 })
-
-
 
 
 app.get("/update/:uid", function (req, res) {
@@ -218,9 +196,9 @@ app.get("/update/:uid", function (req, res) {
 	var config = {
 		method: 'get',
 		url: `https://spaexample-43742-default-rtdb.firebaseio.com/data/${id}.json`,
-		headers: { }
+		//headers: { }
 	  };
-	  axios(config)
+	axios(config)
 	  .then((response) => {
 		let dataFromAPI = response.data;
 		return dataFromAPI
@@ -232,9 +210,8 @@ app.get("/update/:uid", function (req, res) {
 	  .catch(function (error) {
 		console.log(error);
 	  });
-	// res.render("pages/update"); 
+	   
 });
-
 
 // Express's .listen method is the final part of Express that fires up the server on the assigned port and starts "listening" for request from the app! (boilerplate code from the docs)
 
